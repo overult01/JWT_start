@@ -5,7 +5,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.filter.CorsFilter;
+
+import com.cos.jwt.filter.MyFilter1;
+import com.cos.jwt.filter.MyFilter3;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +23,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		
+		// 내가 만든 필터가 시큐리티 필터 체인보다 먼저 걸리게 하고 싶을 때 
+		http.addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class); // 해당 필터가 걸리기 전에 직접 생성한 필터(시큐리티 chain에 등록x된)를 걸기
+		
 		http.csrf().disable();
 		
 		http
