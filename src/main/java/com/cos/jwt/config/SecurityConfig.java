@@ -13,8 +13,9 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import org.springframework.web.filter.CorsFilter;
 
 import com.cos.jwt.config.jwt.JwtAuthenticationFilter;
-import com.cos.jwt.filter.MyFilter1;
+import com.cos.jwt.config.jwt.JwtAuthorizationFilter;
 import com.cos.jwt.filter.MyFilter3;
+import com.cos.jwt.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	private final CorsFilter corsFilter;
+	private final UserRepository userRepository;
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -34,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		// 내가 만든 필터가 시큐리티 필터 체인보다 먼저 걸리게 하고 싶을 때 
-		http.addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class); // 해당 필터가 걸리기 전에 직접 생성한 필터(시큐리티 chain에 등록x된)를 걸기
+		// http.addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class); // 해당 필터가 걸리기 전에 직접 생성한 필터(시큐리티 chain에 등록x된)를 걸기
 		
 		http.csrf().disable();
 		
@@ -51,7 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		.httpBasic().disable() // 기본 로그인 방식 미사용
 		
-		.addFilter(new JwtAuthenticationFilter(authenticationManager())); // UsernamePasswordAuthenticationFilter 재활성화
+		.addFilter(new JwtAuthenticationFilter(authenticationManager())) // UsernamePasswordAuthenticationFilter 재활성화
+		.addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository));
 		
 		http.authorizeRequests()
 		.antMatchers("/api/v1/user/**")

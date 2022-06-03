@@ -105,7 +105,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.withClaim("username", principalDetails.getUser().getUsername())
 				.sign(Algorithm.HMAC512("cos")); // 매개변수는 내  서버가 갖는 고유한 값 
 
-		response.addHeader("Authorization", "Bearer " + jwtToken); // 응답의 헤더에 jwt 전달 
+		response.addHeader("Authorization", "Bearer " + jwtToken); // 응답의 헤더에 jwt 전달 (클라이언트로)
 	}
 	
 }
