@@ -17,9 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RestApiController {
 	
-	private final BCryptPasswordEncoder bCryptPasswordEncoder;
-	
 	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@GetMapping("home")
 	public String home() {
