@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		
 		http
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 미사용 설정 
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // STATELESS: 세션 미사용 설정 
 		.and()
 		
 		// 인증 x일 때: 컨트롤러에 @CrossOrigin / 인증 O일 때: 시큐리티 필터에 등록
