@@ -5,10 +5,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.filter.CorsFilter;
 
+import com.cos.jwt.config.jwt.JwtAuthenticationFilter;
 import com.cos.jwt.filter.MyFilter1;
 import com.cos.jwt.filter.MyFilter3;
 
@@ -40,7 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		// jwt사용시 여기까지는 기본 
 		
-		.httpBasic().disable(); // 기본 로그인 방식 미사용
+		.httpBasic().disable() // 기본 로그인 방식 미사용
+		
+		.addFilter(new JwtAuthenticationFilter(authenticationManager())); // UsernamePasswordAuthenticationFilter 재활성화
 		
 		http.authorizeRequests()
 		.antMatchers("/api/v1/user/**")
